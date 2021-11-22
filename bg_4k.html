@@ -407,19 +407,6 @@
         }
 
 
-        .sidepanel a {
-            padding: 8px 8px 8px 32px;
-            text-decoration: none;
-            font-size: 25px;
-            color: #818181;
-            display: block;
-            transition: 0.3s;
-        }
-
-        .sidepanel a:hover {
-            color: #f1f1f1;
-        }
-
         .sidepanel .closebtn {
             display: flex;
             position: absolute;
@@ -809,6 +796,24 @@
             display: flex;
             justify-content: center;
         }
+
+        .qr {
+            display: flex;
+            align-content: center;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            flex-direction: column;
+            flex-wrap: nowrap;
+        }
+
+        .download-qr {
+            margin-top: 20px;
+        }
+
+        .download-qr img {
+            width: 80px;
+        }
     </style>
 </head>
 
@@ -917,7 +922,7 @@
         //     return resolution["4k"]
         // }
         // const res = resolutionParams();
-
+        const siteUrl = '';
 
         const zoomButtons = document.getElementById("zoomButtons");
         const filtersDiv = document.getElementById("filtersDiv");
@@ -2983,8 +2988,10 @@
                         console.log('homesData', homesData);
 
                         const tabNames = homesData.map((data, key) => {
+                            let checked = "checked";
+                            if (key >= 1) { checked = "" }
                             return `
-                                <input type="radio" id="tab-link-${key}" name="tabset" checked>
+                                <input type="radio" id="tab-link-${key}" name="tabset" ${checked}>
                                 <label for="tab-link-${key}">${data['DESIGN']}</label>
                             `
                         }).join("")
@@ -3025,10 +3032,37 @@
                                 `
                             }
 
+                            let builder = '';
+                            if (data['BUILDER'] !== "") {
+                                const builderName = (new DOMParser()).parseFromString(data['BUILDER'], 'text/html').querySelector('span').innerText;
+                                console.log('builder', builderName);
+
+                                const bImg = mainData.builders.find(i => i.builderName === builderName);
+                                if (bImg) {
+                                    builder = `<img src="${bImg.active}"></a>`
+                                }
+                            }
+
+                            const qrid = "qrcode_" + (new Date()).getTime();
+                            let download = '';
+                            if (data['BROCHURE']) {
+                                const pdf = data['BROCHURE'];
+                                const link = siteUrl + `/homes/${data['HOME_ID']}/brochure.pdf`;
+                                setTimeout(() => {//wait for content get printed on the page
+                                    new QRCode(document.getElementById(qrid), {
+                                        text: link,
+                                        width: 170,
+                                        height: 170,
+                                    });
+                                }, 500)
+
+                                download = `<a target="_blank" href="${link}"><img src="img/download.png"></a>`
+                            }
+
+
                             return `
                                 <section class="tab-panel" id="tab-${key}">
                                     ${data['DESIGN']}
-
                                     <div style="padding:10px;">
                                         <div>
                                             <div class="lotItem title" >${lotData['Lot_Home_Facade']}</div>
@@ -3054,7 +3088,11 @@
                                                 ${prices}
                                             </div>
 
-                                            <div id="qrcode"></div>
+                                            <div class="qr">
+                                                <div>${builder}</div>
+                                                <div id="${qrid}"></div>
+                                                <div class="download-qr">${download}</div>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -3085,8 +3123,6 @@
                                 `
                         }
 
-
-
                         lotText = `
                         <div class="lotLandOnly">
                             <div>
@@ -3103,7 +3139,7 @@
                                 <div class="lotItem">Lot Depth: ${lotData['Lot_Depth']}m</div>
                                 <div class="lotItem">Lot Size: ${lotData['Lot_SQM']}m<sup>2</sup></div>
                                 ${prices}
-                                <div id="qrcode"></div>
+                                <div class="qrcode"></div>
                             </div>
                         </div>
                         `
@@ -3158,16 +3194,16 @@
                     openSidePannel(lotText)
 
                     //generate qr code
+                    /*
                     if (document.getElementById("qrcode")) {
-
                         const pdf = (new DOMParser()).parseFromString(lotData['LOT_PDF'], 'text/html').querySelector('a').getAttribute("href");
-                        console.log('pdf', pdf);
                         new QRCode(document.getElementById("qrcode"), {
                             text: pdf,
                             width: 170,
                             height: 170,
                         });
                     }
+                    */
                 }
             });
 
@@ -3214,7 +3250,6 @@
             });
 
             map.on('moveend', () => {
-
                 getInfo();
             })
             map.on('click', (e) => {
