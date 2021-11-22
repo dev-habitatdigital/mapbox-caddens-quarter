@@ -2971,12 +2971,15 @@
                     // ----------------------------- TABS ---------------------------------------
                     const homes = lotData['HOMEs'];
                     let tabs = '';
+                    const landPrice = (lotData['Lot_Land_Price'] !== 0) ? "" : `<div class="lotItem"><span>Land Price</span>: $${Number(lotData['Lot_Land_Price']).toLocaleString('en')}</div>`;
+
+
                     if (homes !== "") {
                         const span = (new DOMParser()).parseFromString(homes, 'text/html').querySelectorAll('span')
-                        console.log('span', span);
                         const homesData = Array.from(span).map(item => {
                             return mainData.homes.find(home => home.DESIGN === item.innerText);
                         })
+
                         console.log('homesData', homesData);
 
                         const tabNames = homesData.map((data, key) => {
@@ -2988,7 +2991,23 @@
 
                         const tabContent = homesData.map((data, key) => {
 
-                            const pPrice = data['PRICING']//?????????????????
+                            const pPrice = data['HOME_PRICE']//?????????????????
+
+                            let price;
+                            let packagePrice;
+
+                            if (lotData['Lot_House_Price'] !== "") {
+                                price = Number(lotData['Lot_House_Price']).toLocaleString('en');
+                            } else {
+                                price = Number(data['HOME_PRICE']).toLocaleString('en');
+                            }
+
+                            if (lotData['Lot_Price'] !== "") {
+                                packagePrice = Number(lotData['Lot_Price']).toLocaleString('en');
+                            } else {
+                                packagePrice = Number(data['TOTAL_PRICE']).toLocaleString('en');
+                            }
+
                             return `
                                 <section class="tab-panel" id="tab-${key}">
                                     ${data['DESIGN']}
@@ -3015,9 +3034,9 @@
                                                 <div class="lotItem"><span>Lot Width</span>: ${lotData['Lot_Width']}m</div>
                                                 <div class="lotItem"><span>Lot Depth</span>: ${lotData['Lot_Depth']}m</div>
                                                 <div class="lotItem"><span>Lot Size</span>: ${data['SIZE']}m<sup>2</sup></div>
-                                                <div class="lotItem"><span>Land Price</span>: $${Number(lotData['Lot_Land_Price']).toLocaleString('en')}</div>
-                                                <div class="lotItem"><span>House price</span>: $${Number(lotData['Lot_House_Price']).toLocaleString('en')}</div>
-                                                <div class="lotItem"><span>Package price</span>: $${Number(data['PRICING']).toLocaleString('en')}</div>
+                                                ${landPrice}
+                                                <div class="lotItem"><span>House price</span>: $${price}</div>
+                                                <div class="lotItem"><span>Package price</span>: $${packagePrice}</div>
                                             </div>
 
                                             <div id="qrcode"></div>
@@ -3059,9 +3078,7 @@
                                 <div class="lotItem">Lot Width: ${lotData['Lot_Width']}m</div>
                                 <div class="lotItem">Lot Depth: ${lotData['Lot_Depth']}m</div>
                                 <div class="lotItem">Lot Size: ${lotData['Lot_SQM']}m<sup>2</sup></div>
-
-                                <div class="lotItem">Land Price: $${Number(lotData['Lot_Land_Price']).toLocaleString('en')}</div>
-                                    
+                                ${landPrice}
                                 <div class="lotItem">Total Price</div>
 
                                 <div id="qrcode"></div>
@@ -3096,7 +3113,7 @@
                                     <div class="lotItem"><span>Lot Width</span>: ${lotData['Lot_Width']}m</div>
                                     <div class="lotItem"><span>Lot Depth</span>: ${lotData['Lot_Depth']}m</div>
                                     <div class="lotItem"><span>Lot Size</span>: ${lotData['Lot_Size']}m<sup>2</sup></div>
-                                    <div class="lotItem"><span>Land Price</span>: $${Number(lotData['Lot_Land_Price']).toLocaleString('en')}</div>
+                                    ${landPrice}
                                     <div class="lotItem"><span>House price</span>: $${Number(lotData['Lot_House_Price']).toLocaleString('en')}</div>
                                     <div class="lotItem"><span>Package price</span>: $${Number(lotData['Lot_Price']).toLocaleString('en')}</div>
                                 </div>
