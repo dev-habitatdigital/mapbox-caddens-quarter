@@ -319,8 +319,8 @@
         }
 
         .search-icon {
-            width: 100px;
-            height: 100px;
+            /* width: 100px;
+            height: 100px; */
         }
 
         .small-icon {
@@ -2133,7 +2133,7 @@
             //BUILDERS data
             getObject('object_14').then(json => {
                 console.log('BUILDERS', json);
-                mainData.builders = json.map(i => {
+                mainData.builders = json.filter(i => i.Builder_FilterButton_Active !== "").map(i => {
 
                     const inactiveImg = (new DOMParser()).parseFromString(i.Builder_FilterButton_InActive, 'text/html').querySelector('img');
                     const inactive = inactiveImg.src;
