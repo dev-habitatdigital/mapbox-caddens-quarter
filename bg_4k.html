@@ -2965,7 +2965,7 @@
 
                 if (lotData) {
 
-                    console.log('lotData', lotData);
+                    console.log('lotData--------------------', lotData);
                     // ----------------------------- TABS ---------------------------------------
                     // ----------------------------- TABS ---------------------------------------
                     // ----------------------------- TABS ---------------------------------------
@@ -2982,7 +2982,7 @@
                         const tabNames = homesData.map((data, key) => {
                             return `
                                 <input type="radio" id="tab-link-${key}" name="tabset" checked>
-                                <label for="tab-link-${key}">${data['FACADE']}</label>
+                                <label for="tab-link-${key}">${data['DESIGN']}</label>
                             `
                         }).join("")
 
@@ -3038,6 +3038,7 @@
                                 </div>
                             </div>
                         `
+                        lotText = tabs
                     }
 
 
@@ -3069,10 +3070,10 @@
                         `
                     }
 
-                    if (lotData['Lot_Type'] === "House & Land") {
+                    //If Lots.HOMES = empty use LOTS else USE HOMES
+                    if (lotData['Lot_Type'] === "House & Land" && lotData['HOMEs'] === "") {
 
                         lotText = `
-                        ${tabs}
                         <div style="padding:10px;">
                             <div>
                                 <div class="lotItem title" >${lotData['Lot_Home_Facade']}</div>
@@ -3104,7 +3105,6 @@
                             </div>
                         </div>
                         `
-
                     }
                 }
 
