@@ -330,7 +330,7 @@
 
         .search-bar {
             /* background-position: calc(100% + 200px) center; */
-            /* background-image: url('img/search-bar-right.png');
+            /* background-image: url('img/buttons/search-bar-right.png');
             background-repeat: no-repeat;
             background-position: center right;
             background-size: 1111px 200px; */
@@ -340,7 +340,7 @@
             height: 100px;
 
 
-            background-image: url('img/search-bar-right.png'), url('img/Footer.png');
+            background-image: url('img/buttons/search-bar-right.png'), url('img/buttons/Footer.png');
             background-position: center right, left top;
             background-repeat: no-repeat, no-repeat;
             /* background-size: 1111px 200px, 1111px 200px; */
@@ -354,7 +354,7 @@
         .sidepanel {
             width: 0;
             position: fixed;
-            z-index: 1;
+            z-index: 3;
             height: 100%;
             top: 0;
             left: 0;
@@ -578,13 +578,13 @@
         #legend {
             width: 450px;
             height: 50px;
-            position: absolute;
+            position: fixed;
             bottom: 200px;
             left: 0px;
             background-color: #292829;
             color: white;
             transition: 0.5s;
-            z-index: 1000;
+            z-index: 2;
         }
 
         /* #legend img {
@@ -824,7 +824,7 @@
     <div id="legend">
         <div id="legend-title">LEGEND</div>
         <div id="legend-content">
-            <img src="img/Legend@4x.png" alt="">
+            <img src="img/buttons/Legend@4x.png" alt="">
         </div>
         <div class="flex-center">
             <div id="legend-close" class="">×</div>
@@ -1061,22 +1061,70 @@
 
             }
             // UPDATE LOTS WITH HOUSE TABLE DATA 
-            const newLotsData = [...mainData.lots];
-            console.log('newLotsData', newLotsData);
 
-            newLotsData
+            const searchLotsData = JSON.parse(JSON.stringify(mainData.lots));
+            searchLotsData.forEach(lot => {
+                if (lot['HOMEs'] !== "") {
+                    const span = (new DOMParser()).parseFromString(lot['HOMEs'], 'text/html').querySelectorAll('span')
+                    const homesData = Array.from(span).map(item => {
+                        const design = item.innerText
+                        return mainData.homes.find(home => home['DESIGN'] === design)
+                    })
+
+
+                    lot['Lot_Bedrooms'] = [+lot['Lot_Bedrooms'], ...homesData.map(i => i['BEDROOMS'])].filter(Number)
+                    lot['Lot_CarSpaces'] = [+lot['Lot_CarSpaces'], ...homesData.map(i => i['CAR_SPACES'])].filter(Number)
+                    lot['Lot_Storeys'] = [+lot['Lot_Storeys'], ...homesData.map(i => i['STOREYS'])].filter(Number)
+
+                    lot['Lot_Home_Size'] = [+lot['Lot_Home_Size'], ...homesData.map(i => i['SIZE'])].filter(Number)
+
+
+                    console.log('homesData', homesData);
+                    const prices = homesData.map(i => {
+                        if (+i['TOTAL_PRICE'] > 0) {
+                            return +i['TOTAL_PRICE'];
+                        } else {
+                            return +i['HOME_PRICE'] + lot['Lot_Price']
+                        }
+                    })
+                    console.log('prices', prices);
+                    lot['Lot_Price'] = [...prices].filter(Number)
+                    console.log('prices', lot['Lot_Price']);
+                }
+            })
+
+            console.log('searchLotsData', searchLotsData);
+
+            searchLotsData
                 .filter(i => i.Lot_Polygon_Data !== "")
                 .filter(i => {
                     if (filters.room && filters.room.length > 0) {
+
+                        //---- add HOME DATA[start] -----------
+                        if (Array.isArray(i['Lot_Bedrooms'])) {
+                            const filtered = filters.room.filter(value => i['Lot_Bedrooms'].includes(value))
+                            return filtered;
+                        }
+                        //---- add HOME DATA[end] -----------
+
                         if (filters.room.includes(i['Lot_Bedrooms'])) {
                             return i
                         }
+
                     } else {
                         return i
                     }
                 })
                 .filter(i => {
                     if (filters.garage && filters.garage.length > 0) {
+
+                        //---- add HOME DATA[start] -----------
+                        if (Array.isArray(i['Lot_CarSpaces'])) {
+                            const filtered = filters.garage.filter(value => i['Lot_CarSpaces'].includes(value))
+                            return filtered;
+                        }
+                        //---- add HOME DATA[end] -----------
+
                         if (filters.garage.includes(i['Lot_CarSpaces'])) {
                             return i
                         }
@@ -1086,6 +1134,14 @@
                 })
                 .filter(i => {
                     if (filters.storey && filters.storey.length > 0) {
+
+                        //---- add HOME DATA[start] -----------
+                        if (Array.isArray(i['Lot_Storeys'])) {
+                            const filtered = filters.storey.filter(value => i['Lot_Storeys'].includes(value))
+                            return filtered;
+                        }
+                        //---- add HOME DATA[end] -----------
+
                         if (filters.storey.includes(i['Lot_Storeys'])) {
                             return i
                         }
@@ -1113,11 +1169,28 @@
                         return i
                     }
                 })
-                .filter(i => minMax("Lot_Home_Size", i))
-                .filter(i => minMax("Lot_Width", i))
-                .filter(i => minMax("Lot_Price", i))
-                .filter(i => minMax("Lot_Depth", i))
-                .filter(i => minMax("Lot_SQM", i))
+                .filter(i => {
+                    if (Array.isArray(i["Lot_Home_Size"])) {
+
+                        console.log('ARRAY!!!!!!!!!!!!!!!!', i);
+                        return i["Lot_Home_Size"].some(s => minMax("Lot_Home_Size", s))
+
+                    } else {
+                        return minMax("Lot_Home_Size", i['Lot_Home_Size'])
+                    }
+                })
+                .filter(i => minMax("Lot_Width", i['Lot_Width']))
+                .filter(i => {
+
+                    if (Array.isArray(i["Lot_Price"])) {
+                        return i["Lot_Price"].some(s => minMax("Lot_Price", s))
+                    } else {
+                        return minMax("Lot_Price", i['Lot_Price'])
+                    }
+
+                })
+                .filter(i => minMax("Lot_Depth", i['Lot_Depth']))
+                .filter(i => minMax("Lot_SQM", i['Lot_SQM']))
                 .map(i => {
 
                     const lot = JSON.parse(i.Lot_Polygon_Data);
@@ -1153,11 +1226,15 @@
         }
 
         function minMax(FILTER_PROP, i) {
+            console.log('=>', FILTER_PROP, i);
             if (filters && filters[FILTER_PROP] && filters[FILTER_PROP].max > 0) {
                 const { min, max } = filters[FILTER_PROP]
-                const lotValue = +i[FILTER_PROP]
+                const lotValue = +i
+                console.log(FILTER_PROP, ', min, max', lotValue, min, max);
                 if (lotValue >= +min && lotValue <= +max) {
                     return true
+                } else {
+                    return false
                 }
             } else {
                 return true
@@ -1399,8 +1476,8 @@
                         zoom: map.getZoom() + 1
                     })
                 },
-                imgSrc: 'img/zoomin.png',
-                imgMouseDown: "img/zoomin_active.png",
+                imgSrc: 'img/buttons/zoomin.png',
+                imgMouseDown: "img/buttons/zoomin_active.png",
                 imgHover: "",
                 className: " action order1 am",
                 action: ""
@@ -1416,8 +1493,8 @@
                         zoom: map.getZoom() - 1
                     })
                 },
-                imgSrc: 'img/zoomout.png',
-                imgMouseDown: "img/zoomout_active.png",
+                imgSrc: 'img/buttons/zoomout.png',
+                imgMouseDown: "img/buttons/zoomout_active.png",
                 imgHover: "",
                 className: " action order3 am",
                 action: ""
@@ -1442,8 +1519,8 @@
                     updateLotsGeometry("clearFilter")
 
                 },
-                imgSrc: 'img/Reset button.png',
-                imgMouseDown: "img/Reset button_not active.png",
+                imgSrc: 'img/buttons/Reset button.png',
+                imgMouseDown: "img/buttons/Reset button_not active.png",
                 className: "action  order4 am",
                 action: "",
             }
@@ -1694,8 +1771,8 @@
                                 //     searchPanelTier1.classList.add("bottom50")
                                 // }
                             },
-                            imgSrc: `img/${bName}.png`,
-                            imgMouseDown: `img/${bName}.png`,
+                            imgSrc: `img/buttons/${bName}.png`,
+                            imgMouseDown: `img/buttons/${bName}.png`,
                             imgHover: "",
                             className: "search-icon action buttonSearch",
                             action: ""
@@ -1735,9 +1812,9 @@
                             //switch to search panel
                             pannelShow('searchPanelTop')
                         },
-                        imgSrc: `img/return.png`,
-                        imgMouseDown: `img/return.png`,
-                        imgHover: `img/return.png`,
+                        imgSrc: `img/buttons/return.png`,
+                        imgMouseDown: `img/buttons/return.png`,
+                        imgHover: `img/buttons/return.png`,
                         className: "search-icon action returnButton",
                         buttonType: "",
                         customStyle: "align-self: center;margin-left:20px;"
@@ -1814,8 +1891,8 @@
                         callbackAction: function () {
                             pannelShow("searchPanelTier3")
                         },
-                        imgSrc: 'img/builders.png',
-                        imgMouseDown: "img/builders.png",
+                        imgSrc: 'img/buttons/builders.png',
+                        imgMouseDown: "img/buttons/builders.png",
                         className: "search-icon action moreAndClearButtons",
                         action: "",
                     });
@@ -1829,8 +1906,8 @@
                         callbackAction: function () {
                             pannelShow("searchPanelTier2")
                         },
-                        imgSrc: 'img/more.png',
-                        imgMouseDown: "img/more_active.png",
+                        imgSrc: 'img/buttons/more.png',
+                        imgMouseDown: "img/buttons/more_active.png",
                         className: "search-icon action moreAndClearButtons",
                         action: "",
                     });
@@ -1845,9 +1922,9 @@
                             //switch to search panel
                             pannelShow('searchPanelTier1')
                         },
-                        imgSrc: `img/return.png`,
-                        imgMouseDown: `img/return.png`,
-                        imgHover: `img/return.png`,
+                        imgSrc: `img/buttons/return.png`,
+                        imgMouseDown: `img/buttons/return.png`,
+                        imgHover: `img/buttons/return.png`,
                         className: "search-icon action returnButton",
                         buttonType: "",
                         customStyle: "align-self: center;margin-left:20px;"
@@ -1863,9 +1940,9 @@
                             //switch to search panel
                             pannelShow('searchPanelTier2')
                         },
-                        imgSrc: `img/return.png`,
-                        imgMouseDown: `img/return.png`,
-                        imgHover: `img/return.png`,
+                        imgSrc: `img/buttons/return.png`,
+                        imgMouseDown: `img/buttons/return.png`,
+                        imgHover: `img/buttons/return.png`,
                         className: "search-icon action returnButton",
                         buttonType: "",
                         customStyle: "align-self: center;margin-left:20px;"
@@ -1881,8 +1958,8 @@
                             clearFilters()
                             updateLotsGeometry("clearFilter")
                         },
-                        imgSrc: 'img/clear_filter.png',
-                        imgMouseDown: "img/clear_filter_mousedown.png",
+                        imgSrc: 'img/buttons/clear_filter.png',
+                        imgMouseDown: "img/buttons/clear_filter_mousedown.png",
                         className: "search-icon action moreAndClearButtons",
                         action: "",
                     })
@@ -1896,9 +1973,9 @@
                             //switch to search panel
                             pannelShow('searchPanelTop')
                         },
-                        imgSrc: `img/return.png`,
-                        imgMouseDown: `img/return.png`,
-                        imgHover: `img/return.png`,
+                        imgSrc: `img/buttons/return.png`,
+                        imgMouseDown: `img/buttons/return.png`,
+                        imgHover: `img/buttons/return.png`,
                         className: "search-icon action returnButton",
                         buttonType: "",
                         customStyle: "align-self: center;margin-left:20px;",
@@ -1977,9 +2054,9 @@
                                 addremoveFromArray(filters.available, 'available')
                                 updateLotsGeometry()
                             },
-                            imgSrc: `img/tiers/${buttonImage}.png`,
-                            imgMouseDown: `img/tiers/activated/${buttonImage}.png`,
-                            imgHover: `img/tiers/activated/${buttonImage}.png`,
+                            imgSrc: `img/buttons/tiers/${buttonImage}.png`,
+                            imgMouseDown: `img/buttons/tiers/activated/${buttonImage}.png`,
+                            imgHover: `img/buttons/tiers/activated/${buttonImage}.png`,
                             className: "search-icon action searchTier1",
                             buttonType: "toggle",
                         })
@@ -1997,9 +2074,9 @@
                                 addremoveFromArray(filters.storey, rooms)
                                 updateLotsGeometry()
                             },
-                            imgSrc: `img/tiers/${buttonImage}.png`,
-                            imgMouseDown: `img/tiers/activated/${buttonImage}.png`,
-                            imgHover: `img/tiers/activated/${buttonImage}.png`,
+                            imgSrc: `img/buttons/tiers/${buttonImage}.png`,
+                            imgMouseDown: `img/buttons/tiers/activated/${buttonImage}.png`,
+                            imgHover: `img/buttons/tiers/activated/${buttonImage}.png`,
                             className: "search-icon action searchTier1",
                             buttonType: "toggle",
                         })
@@ -2017,9 +2094,9 @@
                                 addremoveFromArray(filters.garage, rooms)
                                 updateLotsGeometry()
                             },
-                            imgSrc: `img/tiers/${buttonImage}.png`,
-                            imgMouseDown: `img/tiers/activated/${buttonImage}.png`,
-                            imgHover: `img/tiers/activated/${buttonImage}.png`,
+                            imgSrc: `img/buttons/tiers/${buttonImage}.png`,
+                            imgMouseDown: `img/buttons/tiers/activated/${buttonImage}.png`,
+                            imgHover: `img/buttons/tiers/activated/${buttonImage}.png`,
                             className: "search-icon action searchTier1",
                             buttonType: "toggle",
                         })
@@ -2037,9 +2114,9 @@
                                 addremoveFromArray(filters.room, rooms)
                                 updateLotsGeometry()
                             },
-                            imgSrc: `img/tiers/${buttonImage}.png`,
-                            imgMouseDown: `img/tiers/activated/${buttonImage}.png`,
-                            imgHover: `img/tiers/activated/${buttonImage}.png`,
+                            imgSrc: `img/buttons/tiers/${buttonImage}.png`,
+                            imgMouseDown: `img/buttons/tiers/activated/${buttonImage}.png`,
+                            imgHover: `img/buttons/tiers/activated/${buttonImage}.png`,
                             className: "search-icon action searchTier1",
                             buttonType: "toggle",
                         })
@@ -2411,6 +2488,8 @@
                 })
                 //==== INTERNAL =====
 
+
+
                 //URL PARAMS
                 if (urlProps.amenityid && urlProps.amenityid > 0) {
                     const c = data.find(i => +i['Amenity_ID'] === +urlProps.amenityid)
@@ -2426,10 +2505,8 @@
             })
             map.addSource("myImageSource", {
                 "type": "image",
-                "url": "georef8x.png",
-                //qgis tiff layer
+                "url": "img/buttons/georef8x.png",
                 "coordinates": [
-                    //   [150.674623517, -34.209824792], [150.704952437, -34.209824792], [150.704952437, -34.236197063], [150.674623517, -34.236197063]
                     [150.73298553, -33.770428181],
                     [150.737751542, -33.770428181],
                     [150.737751542, -33.773722752],
@@ -2923,7 +3000,7 @@
                                             <div class="lotItem title" >${lotData['Lot_Home_Facade']}</div>
                                         </div>
                                         <div>
-                                            <img src="data/Lots/${id}/hero.jpg" style="width:100%">
+                                            <img src="homes/${data['HOME_ID']}/hero.jpg" style="width:100%">
                                         </div>
                                         <div>
                                             <div class="inlineRow">
@@ -2931,9 +3008,9 @@
                                                 <div class="lotItem">${lotData['Lot_Status']}</div>
                                             </div>
                                             <div class="inlineRow">
-                                                <div class="lotItem"><img src="img/bed.png">${data['BEDROOMS']}</div>
-                                                <div class="lotItem"><img src="img/bath.png">${data['BATHROOMS']}</div>
-                                                <div class="lotItem"><img src="img/car.png">${data['CAR_SPACES']}</div>
+                                                <div class="lotItem"><img src="img/buttons/bed.png">${data['BEDROOMS']}</div>
+                                                <div class="lotItem"><img src="img/buttons/bath.png">${data['BATHROOMS']}</div>
+                                                <div class="lotItem"><img src="img/buttons/car.png">${data['CAR_SPACES']}</div>
                                             </div>
 
                                             <div class="houseDescr">
@@ -3011,9 +3088,9 @@
                                     <div class="lotItem">${lotData['Lot_Status']}</div>
                                 </div>
                                 <div class="inlineRow">
-                                    <div class="lotItem"><img src="img/bed.png">${lotData['Lot_Bedrooms']}</div>
-                                    <div class="lotItem"><img src="img/bath.png">${lotData['Lot_Bathrooms']}</div>
-                                    <div class="lotItem"><img src="img/car.png">${lotData['Lot_CarSpaces']}</div>
+                                    <div class="lotItem"><img src="img/buttons/bed.png">${lotData['Lot_Bedrooms']}</div>
+                                    <div class="lotItem"><img src="img/buttons/bath.png">${lotData['Lot_Bathrooms']}</div>
+                                    <div class="lotItem"><img src="img/buttons/car.png">${lotData['Lot_CarSpaces']}</div>
                                 </div>
 
                                 <div class="houseDescr">
