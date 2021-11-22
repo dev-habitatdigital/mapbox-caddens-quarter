@@ -3008,6 +3008,23 @@
                                 packagePrice = Number(data['TOTAL_PRICE']).toLocaleString('en');
                             }
 
+                            console.log('packagePrice', packagePrice);
+
+                            if (packagePrice !== 0 && packagePrice !== "0") {
+                                packagePrice = `<div class="lotItem"><span>Package price</span>: $${packagePrice}</div>`
+                            } else {
+                                packagePrice = ``;
+                            }
+
+                            let prices = ``;
+                            if (lotData['Lot_Status'] === "Available") {
+                                prices = `    
+                                ${landPrice}
+                                <div class="lotItem"><span>House price</span>: $${price}</div>
+                                ${packagePrice}
+                                `
+                            }
+
                             return `
                                 <section class="tab-panel" id="tab-${key}">
                                     ${data['DESIGN']}
@@ -3034,9 +3051,7 @@
                                                 <div class="lotItem"><span>Lot Width</span>: ${lotData['Lot_Width']}m</div>
                                                 <div class="lotItem"><span>Lot Depth</span>: ${lotData['Lot_Depth']}m</div>
                                                 <div class="lotItem"><span>Lot Size</span>: ${data['SIZE']}m<sup>2</sup></div>
-                                                ${landPrice}
-                                                <div class="lotItem"><span>House price</span>: $${price}</div>
-                                                <div class="lotItem"><span>Package price</span>: $${packagePrice}</div>
+                                                ${prices}
                                             </div>
 
                                             <div id="qrcode"></div>
@@ -3062,8 +3077,17 @@
 
 
                     if (lotData['Lot_Type'] === "Land") {
-                        lotText = `
 
+                        let prices = ``;
+                        if (lotData['Lot_Status'] === "Available") {
+                            prices = `    
+                                    ${landPrice}
+                                `
+                        }
+
+
+
+                        lotText = `
                         <div class="lotLandOnly">
                             <div>
                                 <img src="data/Bingara_Local_Files/${id}/lot.png" style="width:100%">
@@ -3078,9 +3102,7 @@
                                 <div class="lotItem">Lot Width: ${lotData['Lot_Width']}m</div>
                                 <div class="lotItem">Lot Depth: ${lotData['Lot_Depth']}m</div>
                                 <div class="lotItem">Lot Size: ${lotData['Lot_SQM']}m<sup>2</sup></div>
-                                ${landPrice}
-                                <div class="lotItem">Total Price</div>
-
+                                ${prices}
                                 <div id="qrcode"></div>
                             </div>
                         </div>
@@ -3089,6 +3111,15 @@
 
                     //If Lots.HOMES = empty use LOTS else USE HOMES
                     if (lotData['Lot_Type'] === "House & Land" && lotData['HOMEs'] === "") {
+
+                        let prices = ``;
+                        if (lotData['Lot_Status'] === "Available") {
+                            prices = `    
+                                    ${landPrice}
+                                    <div class="lotItem"><span>House price</span>: $${Number(lotData['Lot_House_Price']).toLocaleString('en')}</div>
+                                    <div class="lotItem"><span>Package price</span>: $${Number(lotData['Lot_Price']).toLocaleString('en')}</div>
+                                `
+                        }
 
                         lotText = `
                         <div style="padding:10px;">
@@ -3113,9 +3144,7 @@
                                     <div class="lotItem"><span>Lot Width</span>: ${lotData['Lot_Width']}m</div>
                                     <div class="lotItem"><span>Lot Depth</span>: ${lotData['Lot_Depth']}m</div>
                                     <div class="lotItem"><span>Lot Size</span>: ${lotData['Lot_Size']}m<sup>2</sup></div>
-                                    ${landPrice}
-                                    <div class="lotItem"><span>House price</span>: $${Number(lotData['Lot_House_Price']).toLocaleString('en')}</div>
-                                    <div class="lotItem"><span>Package price</span>: $${Number(lotData['Lot_Price']).toLocaleString('en')}</div>
+                                
                                 </div>
 
                                 <div id="qrcode"></div>
