@@ -2814,11 +2814,34 @@
                 console.log('e.features[0]', e.features[0]);
                 const webhook = e.features[0].properties['Amenity_Webhook'];
                 const Amenity_ID = e.features[0].properties['Amenity_ID'];
-                //  console.log('webhook', webhook);
-                //  webHook(webhook)
                 updateAmenities(Amenity_ID)
 
-                openSidePannel()
+                console.log('Amenity_ID EXTERNAL', Amenity_ID);
+
+                if (Amenity_ID && +Amenity_ID > 0) {
+
+                    const amenity = mainData.amenitiesList.find(i => i.Amenity_ID === Amenity_ID)
+                    const am = mainData.amenities.find(i => i.Amenity_Cat_Name === amenity.Amenity_Category_Name)
+                    const amIconImg = (am) ? am.Amenity_Cat_IconActive : ""
+                    console.log('amIconImg', amIconImg);
+
+                    const html = `
+                    <div class="am_image">
+                        <img src="data/POI/${Amenity_ID}.png" style="width:100%">
+                    </div>
+                    <div class="am_data">
+                        <div class="am_titles">
+                            ${amIconImg}
+                            <h2>${amenity['Amenity_Display_Title']}</h2>
+                        </div>
+                        <div class="am_descr">
+                            ${amenity['Amenity_Display_Description']}
+                        </div>
+                    </div>
+                    `
+                    openSidePannel(html)
+                }
+
             });
 
             map.on('mousemove', 'amenitiesicon', function (e) {
