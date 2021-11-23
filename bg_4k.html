@@ -861,6 +861,10 @@
             justify-content: center;
             align-items: center;
         }
+
+        .height100 {
+            height: 100%
+        }
     </style>
 </head>
 
@@ -2017,6 +2021,24 @@
                         className: "search-icon action moreAndClearButtons",
                         action: "",
                     })
+
+                    createButton({ //CLEAR FILTERS BUTTON searchLandMore
+                        // buttonType: "toggle",
+                        positionType: 'flex',
+                        position: { top: 10, left: 70 },
+                        imgSize: { width: 150, height: 150 },
+                        layerId: "searchLandMore",
+                        callbackAction: function () {
+                            clearFilters()
+                            updateLotsGeometry("clearFilter")
+                        },
+                        imgSrc: 'img/buttons/clear_filter.png',
+                        imgMouseDown: "img/buttons/clear_filter_mousedown.png",
+                        className: "search-icon action moreAndClearButtons ",
+                        action: "",
+                        customStyle: "align-self: center;"
+                    })
+
                     createButton({
                         layerId: 'searchPanelTier1',
                         positionType: 'flex',
