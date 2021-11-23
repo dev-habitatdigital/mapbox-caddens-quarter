@@ -814,10 +814,61 @@
         .download-qr img {
             width: 80px;
         }
+
+
+
+        .loader {
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid #3498db;
+            width: 120px;
+            height: 120px;
+            -webkit-animation: spin 2s linear infinite;
+            /* Safari */
+            animation: spin 2s linear infinite;
+        }
+
+        /* Safari */
+        @-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        #loaderModal {
+            display: flex;
+            position: fixed;
+            z-index: 99000;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgb(5 5 5 / 76%);
+            align-content: center;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
 </head>
 
 <body>
+
+    <div id="loaderModal">
+        <div class="loader"></div>
+    </div>
+
 
     <div id="mySidepanel" class="sidepanel">
         <div class="closebtn" onclick="closeSidePannel()">×</div>
@@ -924,6 +975,7 @@
         // const res = resolutionParams();
         const siteUrl = '';
 
+        const loaderModal = document.getElementById("loaderModal");
         const zoomButtons = document.getElementById("zoomButtons");
         const filtersDiv = document.getElementById("filtersDiv");
         const infoDiv = document.getElementById("info");
@@ -3374,8 +3426,9 @@
         const loaded = [];
         function loadingDone(param) {
             loaded.push(param)
-            if (loaded.length === 4) {
+            if (loaded.length >= 7) {
                 console.log('ALLDONE!');
+                loaderModal.style.display = 'none'
                 //fetch('https://api.intuiface.com/webtriggers/v1/sendMessage?message=maploaded&playerTags=bingaramap&apikey=b58eded3-1d8b-40f3-8908-9d93335832bc');
                 fetch('https://api.intuiface.com/webtriggers/v1/sendMessage?message=maploaded&playerTags=bingaramap&apikey=b58eded3-1d8b-40f3-8908-9d93335832bc');
             }
