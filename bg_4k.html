@@ -540,6 +540,19 @@
             border-radius: 50%; */
         }
 
+        .amenity_titles {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            align-content: center;
+        }
+
+        .amenity_titles>img {
+            width: 65px;
+            height: 65px;
+            padding-right: 10px;
+        }
+
         .inlineRow {
             display: flex;
             align-items: center;
@@ -711,7 +724,7 @@
             }
 
             .sidepanel .closebtn {
-                bottom: 120px;
+                bottom: 155px;
             }
         }
 
@@ -864,6 +877,27 @@
 
         .height100 {
             height: 100%
+        }
+
+        .am_distance {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row;
+            margin: 10px 0px;
+        }
+
+        .side-am {
+            height: calc(100% - 100px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .disclaimer  {
+            padding: 5px 15px;
+        }
+        .disclaimer .text {
+            font-size: 12px;
         }
     </style>
 </head>
@@ -2901,16 +2935,28 @@
                     console.log('amIconImg', amIconImg);
 
                     const html = `
-                    <div class="am_image">
-                        <img src="data/POI/${Amenity_ID}.png" style="width:100%">
-                    </div>
-                    <div class="am_data">
-                        <div class="am_titles">
-                            ${amIconImg}
-                            <h2>${amenity['Amenity_Display_Title']}</h2>
+                    <div class="side-am">
+                        <div>
+                            <div class="am_image">
+                                <img src="data/POI/${Amenity_ID}.png" style="width:100%">
+                            </div>
+                            <div class="am_data">
+                                <div class="amenity_titles">
+                                    ${amIconImg}
+                                    <h2>${amenity['Amenity_Display_Title']}</h2>
+                                </div>
+                                <div class="am_distance">
+                                    <div>Distance: ${amenity['Amenity_Distance_To_Project']}km</div>
+                                    <div>Time: ${amenity['Amenity_Time_To_Project']}mins</div>
+                                </div>
+                                <div class="am_descr">
+                                    ${amenity['Amenity_Display_Description']}
+                                </div>
+                            </div>
                         </div>
-                        <div class="am_descr">
-                            ${amenity['Amenity_Display_Description']}
+                        <div class="disclaimer">
+                            <div class="source">Source:${amenity['Amenity_Source_Display_Text']}</div>
+                            <div class="text">Third party data has not been verified by Legacy & Rawson. Purchasers should rely on their own enquiries</div>
                         </div>
                     </div>
                     `
