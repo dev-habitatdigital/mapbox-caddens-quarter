@@ -893,9 +893,10 @@
             justify-content: space-between;
         }
 
-        .disclaimer  {
+        .disclaimer {
             padding: 5px 15px;
         }
+
         .disclaimer .text {
             font-size: 12px;
         }
@@ -1382,6 +1383,13 @@
                                     +i['Amenity_Latitude']
                                 ])
                             })
+                            //add center of the project 
+                            bounds.extend([
+                                +mainData.admin.Project_Longitude,
+                                +mainData.admin.Project_Latitude,
+                            ])
+
+                            console.log('bounds',bounds);
                             map.fitBounds(bounds, { padding: 100 });
 
                         } else {
@@ -2932,7 +2940,7 @@
                     const amenity = mainData.amenitiesList.find(i => i.Amenity_ID === Amenity_ID)
                     const am = mainData.amenities.find(i => i.Amenity_Cat_Name === amenity.Amenity_Category_Name)
                     const amIconImg = (am) ? am.Amenity_Cat_IconActive : ""
-                    console.log('amIconImg', amIconImg);
+                    console.log('amIconImg', amenity);
 
                     const html = `
                     <div class="side-am">
