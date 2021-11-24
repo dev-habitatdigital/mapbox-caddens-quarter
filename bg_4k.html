@@ -3247,17 +3247,24 @@
 
                         let prices = ``;
                         if (lotData['Lot_Status'] === "Available") {
+
+                            let Lot_House_Price = ''
+                            if (+lotData['Lot_House_Price'] > 0) {
+                                Lot_House_Price = `<div class="lotItem"><span>House price</span>: $${Number(lotData['Lot_House_Price']).toLocaleString('en')}</div>`;
+                            }
+
                             prices = `    
                                     ${landPrice}
-                                    <div class="lotItem"><span>House price</span>: $${Number(lotData['Lot_House_Price']).toLocaleString('en')}</div>
+                                    ${Lot_House_Price}
                                     <div class="lotItem"><span>Package price</span>: $${Number(lotData['Lot_Price']).toLocaleString('en')}</div>
                                 `
                         }
 
                         lotText = `
                         <div style="padding:10px;">
-                            <div>
-                                <div class="lotItem title" >${lotData['Lot_Home_Facade']}</div>
+                            <div style="display: flex;justify-content: space-between;">
+                                <div class="lotItem title">${lotData['Lot_Home_Design']}</div>
+                                <div class="lotItem title">${lotData['Lot_Home_Facade']}</div>
                             </div>
                             <div>
                                 <img src="data/Lots/${id}/hero.jpg" style="width:100%">
