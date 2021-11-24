@@ -825,7 +825,7 @@
         }
 
         .download-qr img {
-            width: 80px;
+            /* width: 80px; */
         }
 
 
@@ -1388,7 +1388,7 @@
                                 +mainData.admin.Project_Latitude,
                             ])
 
-                            console.log('bounds',bounds);
+                            console.log('bounds', bounds);
                             map.fitBounds(bounds, { padding: 100 });
 
                         } else {
@@ -3190,11 +3190,15 @@
                                 }
                             }
 
-                            const qrid = "qrcode_" + (new Date()).getTime();
+                            const qrid = key + "_qrcode_" + (new Date()).getTime();
                             let download = '';
                             if (data['BROCHURE']) {
+
                                 const pdf = data['BROCHURE'];
-                                const link = siteUrl + `/homes/${data['HOME_ID']}/brochure.pdf`;
+                                const link = (new DOMParser()).parseFromString(data['BROCHURE'], 'text/html').querySelector('a').href;
+
+                                download = `<a target="_blank" href="${link}"><img src="img/download.jpg"></a>`
+
                                 setTimeout(() => {//wait for content get printed on the page
                                     new QRCode(document.getElementById(qrid), {
                                         text: link,
@@ -3203,7 +3207,7 @@
                                     });
                                 }, 500)
 
-                                download = `<a target="_blank" href="${link}"><img src="img/download.png"></a>`
+                                console.log('download', download);
                             }
 
 
@@ -3313,6 +3317,26 @@
                                 `
                         }
 
+                        const qrid = lotData['Lot_Number'] + (new Date()).getTime();
+                        if (lotData['LOT_PDF']) {
+
+                            const pdf = lotData['LOT_PDF'];
+                            const link = (new DOMParser()).parseFromString(pdf, 'text/html').querySelector('a').href;
+
+                            download = `<a target="_blank" href="${link}"><img src="img/download.jpg"></a>`
+
+                            setTimeout(() => {//wait for content get printed on the page
+                                new QRCode(document.getElementById(qrid), {
+                                    text: link,
+                                    width: 170,
+                                    height: 170,
+                                });
+                            }, 500)
+
+                        }
+
+
+
                         lotText = `
                         <div style="padding:10px;">
                             <div style="display: flex;justify-content: space-between;">
@@ -3340,7 +3364,10 @@
                                 
                                 </div>
 
-                                <div id="qrcode"></div>
+                                <div class="qr">
+                                    <div id="${qrid}"></div>
+                                    <div class="download-qr">${download}</div>
+                                </div>
                             </div>
                         </div>
                         `
