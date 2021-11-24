@@ -577,12 +577,11 @@
         }
 
         #legend {
-            width: 450px;
             height: 50px;
             position: fixed;
             bottom: 200px;
             left: 0px;
-            background-color: #292829;
+            background-color: #005AAD;
             color: white;
             transition: 0.5s;
             z-index: 2;
@@ -625,7 +624,7 @@
 
         #legend-content img {
             /* padding-right: 10px */
-            width: 450px;
+            /* width: 450px; */
         }
 
         @media screen and (max-width: 3400px) {
@@ -920,7 +919,7 @@
     <div id="legend">
         <div id="legend-title">LEGEND</div>
         <div id="legend-content">
-            <img src="img/buttons/Legend@4x.png" alt="">
+            <img src="img/buttons/Legend@2x.png" alt="">
         </div>
         <div class="flex-center">
             <div id="legend-close" class="">×</div>
@@ -1107,7 +1106,7 @@
         // const legendTitle = document.getElementById('legend-title');
         // const legendContent = document.getElementById('legend-content');
         legendTitle.addEventListener("click", () => {
-            legend.style.height = `1000px`;
+            legend.style.height = `475px`;
         })
         legendClose.addEventListener("click", () => {
             legend.style.height = `50px`;
