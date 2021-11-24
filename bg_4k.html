@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>Display a satellite map on a webpage</title>
-    
+
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css" rel="stylesheet">
@@ -2676,7 +2676,7 @@
                 }
             });
 
-        
+
 
 
             map.addSource('amenities', {
@@ -2831,8 +2831,8 @@
             });
 
 
-                //Project_Label_Image
-                map.addSource('project_image', {
+            //Project_Label_Image
+            map.addSource('project_image', {
                 "type": "geojson",
                 "data": {
                     "type": "FeatureCollection",
@@ -2919,7 +2919,7 @@
                     center: [+mainData.admin['Project_Longitude'], +mainData.admin['Project_Latitude']],
                     zoom: +mainData.admin['Project_Zoom_Level']
                 })
-                openSidePannel()
+                //openSidePannel()
             });
             map.on('mousemove', 'project_image', function (e) {
                 map.getCanvas().style.cursor = 'pointer';
