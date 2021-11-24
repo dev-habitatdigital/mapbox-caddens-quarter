@@ -2674,26 +2674,7 @@
                 }
             });
 
-            //Project_Label_Image
-            map.addSource('project_image', {
-                "type": "geojson",
-                "data": {
-                    "type": "FeatureCollection",
-                    "features": []
-                }
-            });
-            map.addLayer({
-                'id': 'project_image',
-                'source': 'project_image',
-                'type': 'symbol',
-                'layout': {
-                    'icon-image': ['get', 'icon'],
-                    'icon-allow-overlap': true,
-                    'icon-ignore-placement': true,
-                    'icon-size': 1
-                }
-            });
-
+        
 
 
             map.addSource('amenities', {
@@ -2844,6 +2825,27 @@
                     'circle-color': ['get', 'color'],
                     'circle-stroke-color': 'white',
                     'circle-stroke-width': 1
+                }
+            });
+
+
+                //Project_Label_Image
+                map.addSource('project_image', {
+                "type": "geojson",
+                "data": {
+                    "type": "FeatureCollection",
+                    "features": []
+                }
+            });
+            map.addLayer({
+                'id': 'project_image',
+                'source': 'project_image',
+                'type': 'symbol',
+                'layout': {
+                    'icon-image': ['get', 'icon'],
+                    'icon-allow-overlap': true,
+                    'icon-ignore-placement': true,
+                    'icon-size': 1
                 }
             });
 
