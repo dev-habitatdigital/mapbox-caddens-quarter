@@ -928,7 +928,7 @@
     <div id="legend">
         <div id="legend-title">LEGEND</div>
         <div id="legend-content">
-            <img src="img/buttons/Legend@2x.png" alt="">
+            <img src="img/buttons/Legend@2x.png" id="legendImage" alt="">
         </div>
         <div class="flex-center">
             <div id="legend-close" class="">×</div>
@@ -994,6 +994,7 @@
 
         const siteUrl = '';
 
+        const legendImage = document.getElementById("legendImage");
         const loaderModal = document.getElementById("loaderModal");
         const zoomButtons = document.getElementById("zoomButtons");
         const filtersDiv = document.getElementById("filtersDiv");
@@ -1086,7 +1087,9 @@
         // const legendTitle = document.getElementById('legend-title');
         // const legendContent = document.getElementById('legend-content');
         legendTitle.addEventListener("click", () => {
-            legend.style.height = `475px`;
+
+            
+            legend.style.height = legendImage.naturalHeight + 115 + `px`;
         })
         legendClose.addEventListener("click", () => {
             legend.style.height = `50px`;
