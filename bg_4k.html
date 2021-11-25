@@ -3155,21 +3155,16 @@
                             let prices = ``;
                             if (lotData['Lot_Status'] === "Available") {
 
+                                let pr = '';
+                                if (price !== "") {
+                                    pr = `<div class="lotItem"><span>House price</span>: $${price}</div>`
+                                }
+
                                 prices = `    
                                     ${landPrice}
-                                    <div class="lotItem"><span>House price</span>: $${price}</div>
-                                ${packagePrice}
+                                    ${pr}
+                                    ${packagePrice}
                                 `
-
-                                // we have to temporarily hide the house and land prices and only show the package price
-                                // we have to temporarily hide the house and land prices and only show the package price
-                                // we have to temporarily hide the house and land prices and only show the package price
-                                // we have to temporarily hide the house and land prices and only show the package price
-                                // we have to temporarily hide the house and land prices and only show the package price
-                                // we have to temporarily hide the house and land prices and only show the package price
-                                // we have to temporarily hide the house and land prices and only show the package price
-                                // we have to temporarily hide the house and land prices and only show the package price
-                                prices = packagePrice
 
                             }
 
@@ -3304,10 +3299,14 @@
                                 Lot_House_Price = `<div class="lotItem"><span>House price</span>: $${Number(lotData['Lot_House_Price']).toLocaleString('en')}</div>`;
                             }
 
+                            let Lot_Price = '';
+                            if (+lotData['Lot_Price'] > 0) {
+                                Lot_Price = `<div class="lotItem"><span>Package price</span>: $${Number(lotData['Lot_Price']).toLocaleString('en')}</div>`
+                            }
                             prices = `    
                                     ${landPrice}
                                     ${Lot_House_Price}
-                                    <div class="lotItem"><span>Package price</span>: $${Number(lotData['Lot_Price']).toLocaleString('en')}</div>
+                                    ${Lot_Price}
                                 `
                         }
 
@@ -3370,25 +3369,8 @@
 
                 if (id && +id > 0) {
                     openSidePannel(lotText)
-
-                    //generate qr code
-                    /*
-                    if (document.getElementById("qrcode")) {
-                        const pdf = (new DOMParser()).parseFromString(lotData['LOT_PDF'], 'text/html').querySelector('a').getAttribute("href");
-                        new QRCode(document.getElementById("qrcode"), {
-                            text: pdf,
-                            width: 170,
-                            height: 170,
-                        });
-                    }
-                    */
                 }
             });
-
-
-            // map.on('click', 'lots-fills', (e) => {
-            //     console.log('e.features[0].properties',e.features[0].properties);
-            // })
 
             map.on('mousemove', 'lots-fills', function (e) {
                 if (e.features.length > 0) {
