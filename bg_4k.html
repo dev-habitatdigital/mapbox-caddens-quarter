@@ -1344,6 +1344,9 @@
 
             if (e.target.classList.contains("am") && e.target.getAttribute("am_id")) {
                 console.log('amenity category clicked');
+
+                closeSidePannel()
+
                 let unselect = false;
                 const amId = +e.target.getAttribute("am_id")
                 const index = activeAmenities.indexOf(amId);
