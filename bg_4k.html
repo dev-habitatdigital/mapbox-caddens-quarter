@@ -3154,11 +3154,23 @@
 
                             let prices = ``;
                             if (lotData['Lot_Status'] === "Available") {
+
                                 prices = `    
-                                ${landPrice}
-                                <div class="lotItem"><span>House price</span>: $${price}</div>
+                                    ${landPrice}
+                                    <div class="lotItem"><span>House price</span>: $${price}</div>
                                 ${packagePrice}
                                 `
+
+                                // we have to temporarily hide the house and land prices and only show the package price
+                                // we have to temporarily hide the house and land prices and only show the package price
+                                // we have to temporarily hide the house and land prices and only show the package price
+                                // we have to temporarily hide the house and land prices and only show the package price
+                                // we have to temporarily hide the house and land prices and only show the package price
+                                // we have to temporarily hide the house and land prices and only show the package price
+                                // we have to temporarily hide the house and land prices and only show the package price
+                                // we have to temporarily hide the house and land prices and only show the package price
+                                prices = packagePrice
+
                             }
 
                             let builder = '';
@@ -3211,7 +3223,7 @@
                                                 <div class="lotItem">Lot: ${lotData['Lot_Number']}</div>
                                                 <div class="lotItem">${lotData['Lot_Status']}</div>
                                             </div>
-                                            <div class="inlineRow">
+                                            <div class="inlineRow" style="justify-content: space-around;">
                                                 <div class="lotItem"><img src="img/buttons/bed.png">${data['BEDROOMS']}</div>
                                                 <div class="lotItem"><img src="img/buttons/bath.png">${data['BATHROOMS']}</div>
                                                 <div class="lotItem"><img src="img/buttons/car.png">${data['CAR_SPACES']}</div>
@@ -3333,7 +3345,7 @@
                                     <div class="lotItem">Lot: ${lotData['Lot_Number']}</div>
                                     <div class="lotItem">${lotData['Lot_Status']}</div>
                                 </div>
-                                <div class="inlineRow">
+                                <div class="inlineRow" style="justify-content: space-around;">
                                     <div class="lotItem"><img src="img/buttons/bed.png">${lotData['Lot_Bedrooms']}</div>
                                     <div class="lotItem"><img src="img/buttons/bath.png">${lotData['Lot_Bathrooms']}</div>
                                     <div class="lotItem"><img src="img/buttons/car.png">${lotData['Lot_CarSpaces']}</div>
