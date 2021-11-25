@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <title>Display a satellite map on a webpage</title>
@@ -897,6 +898,16 @@
         .disclaimer .text {
             font-size: 12px;
         }
+
+
+        @media only screen and(-webkit-min-device-pixel-ratio: 1.25),
+        only screen and(-o-min-device-pixel-ratio: 5/4),
+        only screen and(min-resolution: 120dpi),
+        only screen and(min-resolution: 1.25dppx) {
+            body {
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 
@@ -979,37 +990,8 @@
     </div>
 
     <script>
+        document.querySelector("meta[name=viewport]").setAttribute('content', 'width=device-width, initial-scale=' + (1 / window.devicePixelRatio));
 
-        // const resolutionParams = () => {
-        //     const resolution = {
-        //         "4k": {
-        //             amenitiesButtons: {
-        //                 width: 150,
-        //                 height: 150
-        //             },
-        //             searchPanelTop: {
-        //                 height: 200
-        //             }
-        //         },
-        //         "fullHD": {
-        //             amenitiesButtons: {
-        //                 width: 75,
-        //                 height: 75
-        //             },
-        //             searchPanelTop: {
-        //                 height: 100
-        //             },
-        //             mainSearchPanel: {
-
-        //             }
-        //         }
-        //     }
-        //     if (window.innerWidth <= 1920) {
-        //         return resolution['fullHD']
-        //     }
-        //     return resolution["4k"]
-        // }
-        // const res = resolutionParams();
         const siteUrl = '';
 
         const loaderModal = document.getElementById("loaderModal");
@@ -2620,7 +2602,7 @@
             })
             map.addSource("myImageSource", {
                 "type": "image",
-                "url": "img/buttons/georef8x.png",
+                "url": "rendered.png",
                 "coordinates": [
                     [150.73298553, -33.770428181],
                     [150.737751542, -33.770428181],
