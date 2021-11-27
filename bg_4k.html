@@ -151,7 +151,8 @@
         }
 
         .am_data {
-            padding: 15px;
+            padding: 0px 15px 15px 15px;
+            
         }
 
         .am_image {
@@ -471,13 +472,14 @@
 
         .lotItem.title {
             font-size: 0.9em;
-            justify-content: flex-end;
+            /* justify-content: flex-end; */
+            flex-basis: 30%;
         }
 
         .lotItem>span {
             color: #004282;
             display: inline-block;
-            width: 200px;
+            width: 150px;
         }
 
         .buttonSearch {
@@ -565,8 +567,8 @@
         }
 
         .amenity_titles>img {
-            width: 65px;
-            height: 65px;
+            width: 50px;
+            height: 50px;
             padding-right: 10px;
         }
 
@@ -585,6 +587,7 @@
         .houseDescr>div:nth-child(4) {
             margin-top: 10px;
         }
+
 
         #qrcode {
             padding: 20px;
@@ -899,7 +902,8 @@
             display: flex;
             justify-content: space-between;
             flex-direction: row;
-            margin: 10px 0px;
+            margin: 20px 0px;
+            font-size: 14pt;
         }
 
         .side-am {
@@ -913,8 +917,15 @@
             padding: 5px 15px;
         }
 
-        .disclaimer .text {
+        .disclaimer .source {
             font-size: 12px;
+        }
+        .disclaimer .text {
+            font-size: 10px;
+        }
+
+        .bold {
+            font-weight: bold;
         }
 
         @media (-webkit-device-pixel-ratio: 1.25) {
@@ -3139,9 +3150,15 @@
                         const tabNames = homesData.map((data, key) => {
                             let checked = "checked";
                             if (key >= 1) { checked = "" }
+
+                            let des = data['DESIGN'] //.length > 10 ?  : ?.substring(0, 11);
+                            if (des.length > 10) {
+                                des = des.substring(0, 10) + "..."
+                            }
+
                             return `
                                 <input type="radio" id="tab-link-${key}" name="tabset" ${checked}>
-                                <label for="tab-link-${key}">${data['DESIGN']}</label>
+                                <label for="tab-link-${key}">${des}</label>
                             `
                         }).join("")
 
@@ -3167,7 +3184,7 @@
                             console.log('packagePrice', packagePrice);
 
                             if (packagePrice !== 0 && packagePrice !== "0") {
-                                packagePrice = `<div class="lotItem"><span>Package price</span>: $${packagePrice}</div>`
+                                packagePrice = `<div class="lotItem bold"><span>Package price</span>: $${packagePrice}</div>`
                             } else {
                                 packagePrice = ``;
                             }
@@ -3177,7 +3194,7 @@
 
                                 let pr = '';
                                 if (price !== "") {
-                                    pr = `<div class="lotItem"><span>House price</span>: $${price}</div>`
+                                    pr = `<div class="lotItem bold"><span>House price</span>: $${price}</div>`
                                 }
 
                                 prices = `    
@@ -3235,19 +3252,19 @@
                                         </div>
                                         <div>
                                             <div class="inlineRow">
-                                                <div class="lotItem">Lot: ${lotData['Lot_Number']}</div>
-                                                <div class="lotItem">${lotData['Lot_Status']}</div>
+                                                <div class="lotItem bold">Lot: ${lotData['Lot_Number']}</div>
+                                                <div class="lotItem bold">${lotData['Lot_Status']}</div>
                                             </div>
-                                            <div class="inlineRow" style="justify-content: space-around;">
+                                            <div class="inlineRow" style="justify-content: flex-start;">
                                                 <div class="lotItem"><img src="img/buttons/bed.png">${data['BEDROOMS']}</div>
                                                 <div class="lotItem"><img src="img/buttons/bath.png">${data['BATHROOMS']}</div>
                                                 <div class="lotItem"><img src="img/buttons/car.png">${data['CAR_SPACES']}</div>
                                             </div>
 
                                             <div class="houseDescr">
-                                                <div class="lotItem"><span>Lot Width</span>: ${lotData['Lot_Width']}m</div>
-                                                <div class="lotItem"><span>Lot Depth</span>: ${lotData['Lot_Depth']}m</div>
-                                                <div class="lotItem"><span>Lot Size</span>: ${data['SIZE']}m<sup>2</sup></div>
+                                                <div class="lotItem bold"><span>Lot Width</span>: ${lotData['Lot_Width']}m</div>
+                                                <div class="lotItem bold"><span>Lot Depth</span>: ${lotData['Lot_Depth']}m</div>
+                                                <div class="lotItem bold"><span>Lot Size</span>: ${data['SIZE']}m<sup>2</sup></div>
                                                 ${prices}
                                             </div>
 
@@ -3298,9 +3315,9 @@
                                     <span class="dot ${lotData['Lot_Status']?.toLowerCase()}"></span>
                                 </div>
 
-                                <div class="lotItem">Lot Width: ${lotData['Lot_Width']}m</div>
-                                <div class="lotItem">Lot Depth: ${lotData['Lot_Depth']}m</div>
-                                <div class="lotItem">Lot Size: ${lotData['Lot_SQM']}m<sup>2</sup></div>
+                                <div class="lotItem bold">Lot Width: ${lotData['Lot_Width']}m</div>
+                                <div class="lotItem bold">Lot Depth: ${lotData['Lot_Depth']}m</div>
+                                <div class="lotItem bold">Lot Size: ${lotData['Lot_SQM']}m<sup>2</sup></div>
                                 ${prices}
                                 <div class="qrcode"></div>
                             </div>
@@ -3352,7 +3369,7 @@
 
                         lotText = `
                         <div style="padding:10px;">
-                            <div style="display: flex;justify-content: space-between;">
+                            <div style="display: flex;">
                                 <div class="lotItem title">${lotData['Lot_Home_Design']}</div>
                                 <div class="lotItem title">${lotData['Lot_Home_Facade']}</div>
                             </div>
@@ -3361,19 +3378,19 @@
                             </div>
                             <div>
                                 <div class="inlineRow">
-                                    <div class="lotItem">Lot: ${lotData['Lot_Number']}</div>
-                                    <div class="lotItem">${lotData['Lot_Status']}</div>
+                                    <div class="lotItem bold">Lot: ${lotData['Lot_Number']}</div>
+                                    <div class="lotItem bold">${lotData['Lot_Status']}</div>
                                 </div>
-                                <div class="inlineRow" style="justify-content: space-around;">
+                                <div class="inlineRow" style="justify-content: flex-start;">
                                     <div class="lotItem"><img src="img/buttons/bed.png">${lotData['Lot_Bedrooms']}</div>
                                     <div class="lotItem"><img src="img/buttons/bath.png">${lotData['Lot_Bathrooms']}</div>
                                     <div class="lotItem"><img src="img/buttons/car.png">${lotData['Lot_CarSpaces']}</div>
                                 </div>
 
                                 <div class="houseDescr">
-                                    <div class="lotItem"><span>Lot Width</span>: ${lotData['Lot_Width']}m</div>
-                                    <div class="lotItem"><span>Lot Depth</span>: ${lotData['Lot_Depth']}m</div>
-                                    <div class="lotItem"><span>Lot Size</span>: ${lotData['Lot_Size']}m<sup>2</sup></div>
+                                    <div class="lotItem bold"><span>Lot Width</span>: ${lotData['Lot_Width']}m</div>
+                                    <div class="lotItem bold"><span>Lot Depth</span>: ${lotData['Lot_Depth']}m</div>
+                                    <div class="lotItem bold"><span>Lot Size</span>: ${lotData['Lot_Size']}m<sup>2</sup></div>
                                 
                                 </div>
 
