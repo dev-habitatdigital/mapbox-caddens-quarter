@@ -3232,7 +3232,8 @@
                             console.log('+data[Lot_SQM]', data);
                             console.log('+data[Lot_SQM]', +data['Lot_SQM']);
 
-                            const lotSQM = (+data['Lot_SQM'] > 0) ? `<div class="lotItem bold"><span>Lot SQM</span>: ${data['Lot_SQM']}m<sup>2</sup></div>` : "";
+                            const lotSQM = (+lotData['Lot_SQM'] > 0) ? `<div class="lotItem bold"><span>Lot SQM</span>: ${lotData['Lot_SQM']}m<sup>2</sup></div>` : "";
+                            const dataSize = (+data['SIZE'] > 0) ? `<div class="lotItem bold"><span>Lot Size</span>: ${data['SIZE']}m<sup>2</sup></div>` : "";
 
                             const desName = data['DESIGN_HOME_ID'].replace(/ *\[[^)]*\] */g, "")
 
@@ -3263,7 +3264,7 @@
                                             <div class="houseDescr">
                                                 <div class="lotItem bold"><span>Lot Width</span>: ${lotData['Lot_Width']}m</div>
                                                 <div class="lotItem bold"><span>Lot Depth</span>: ${lotData['Lot_Depth']}m</div>
-                                                <div class="lotItem bold"><span>Lot Size</span>: ${data['SIZE']}m<sup>2</sup></div>
+                                                ${dataSize}
                                                 ${lotSQM}
                                                 ${prices}
                                             </div>
