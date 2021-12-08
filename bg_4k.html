@@ -3146,7 +3146,7 @@
 
                             let des = data['DESIGN_HOME_ID'] //.length > 10 ?  : ?.substring(0, 11);
                             if (des.length > 10) {
-                                
+
                                 des = des.replace(/ *\[[^)]*\] */g, "").substring(0, 10) + "..."
                             }
 
@@ -3187,7 +3187,7 @@
                             if (lotData['Lot_Status'] === "Available") {
 
                                 let pr = '';
-                                if (price !== "") {
+                                if (price !== "" && +price > 0) {
                                     pr = `<div class="lotItem bold"><span>House price</span>: $${price}</div>`
                                 }
 
@@ -3229,13 +3229,18 @@
                                 // console.log('download', download);
                             }
 
+                            console.log('+data[Lot_SQM]', data);
+                            console.log('+data[Lot_SQM]', +data['Lot_SQM']);
+
+                            const lotSQM = (+data['Lot_SQM'] > 0) ? `<div class="lotItem bold"><span>Lot SQM</span>: ${data['Lot_SQM']}m<sup>2</sup></div>` : "";
+
                             const desName = data['DESIGN_HOME_ID'].replace(/ *\[[^)]*\] */g, "")
 
                             return `
                                 <section class="tab-panel" id="tab-${key}">
                                    
                                     <div style="padding:10px;">
-                                        <div>
+                                        <div style="text-align:end">
                                             ${desName}
                                         </div>
                                         <div>
@@ -3259,6 +3264,7 @@
                                                 <div class="lotItem bold"><span>Lot Width</span>: ${lotData['Lot_Width']}m</div>
                                                 <div class="lotItem bold"><span>Lot Depth</span>: ${lotData['Lot_Depth']}m</div>
                                                 <div class="lotItem bold"><span>Lot Size</span>: ${data['SIZE']}m<sup>2</sup></div>
+                                                ${lotSQM}
                                                 ${prices}
                                             </div>
 
