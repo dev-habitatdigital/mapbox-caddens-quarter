@@ -152,7 +152,7 @@
 
         .am_data {
             padding: 0px 15px 15px 15px;
-            
+
         }
 
         .am_image {
@@ -920,6 +920,7 @@
         .disclaimer .source {
             font-size: 12px;
         }
+
         .disclaimer .text {
             font-size: 10px;
         }
@@ -1163,8 +1164,8 @@
                 if (lot['HOMEs'] !== "") {
                     const span = (new DOMParser()).parseFromString(lot['HOMEs'], 'text/html').querySelectorAll('span')
                     const homesData = Array.from(span).map(item => {
-                        const design = item.innerText
-                        return mainData.homes.find(home => home['DESIGN'] === design)
+                        const DESIGN_HOME_ID = item.innerText
+                        return mainData.homes.find(home => home['DESIGN_HOME_ID'] === DESIGN_HOME_ID)
                     })
                     lot['Lot_Bedrooms'] = [+lot['Lot_Bedrooms'], ...homesData.map(i => i['BEDROOMS'])].filter(Number)
                     lot['Lot_CarSpaces'] = [+lot['Lot_CarSpaces'], ...homesData.map(i => i['CAR_SPACES'])].filter(Number)
@@ -3134,7 +3135,7 @@
                     if (homes !== "") {
                         const span = (new DOMParser()).parseFromString(homes, 'text/html').querySelectorAll('span')
                         const homesData = Array.from(span).map(item => {
-                            return mainData.homes.find(home => home.DESIGN === item.innerText);
+                            return mainData.homes.find(home => home.DESIGN_HOME_ID === item.innerText);
                         })
 
                         console.log('homesData', homesData);
@@ -3143,9 +3144,10 @@
                             let checked = "checked";
                             if (key >= 1) { checked = "" }
 
-                            let des = data['DESIGN'] //.length > 10 ?  : ?.substring(0, 11);
+                            let des = data['DESIGN_HOME_ID'] //.length > 10 ?  : ?.substring(0, 11);
                             if (des.length > 10) {
-                                des = des.substring(0, 10) + "..."
+                                
+                                des = des.replace(/ *\[[^)]*\] */g, "").substring(0, 10) + "..."
                             }
 
                             return `
@@ -3228,13 +3230,14 @@
                                 console.log('download', download);
                             }
 
+                            const desName = data['DESIGN_HOME_ID'].replace(/ *\[[^)]*\] */g, "")
 
                             return `
                                 <section class="tab-panel" id="tab-${key}">
                                    
                                     <div style="padding:10px;">
                                         <div>
-                                            ${data['DESIGN']}
+                                            ${desName}
                                         </div>
                                         <div>
                                             <div class="lotItem title" >${lotData['Lot_Home_Facade']}</div>
