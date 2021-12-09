@@ -934,6 +934,43 @@
                 zoom: 0.1;
             }
         }
+
+
+        .floorplan-facade {
+            position: absolute;
+            bottom: 100px;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-content: center;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #004282;
+            color: white;
+            font-weight: bold;
+        }
+
+        .floorplan-facade>div {
+            width: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            align-content: center;
+            padding: 30px 0px;
+            cursor: pointer;
+        }
+
+        .floorplan-facade>div:hover {
+            background-color: #074c92;
+        }
+
+        .floorplan-facade>.active {
+            background-color: #05539f;
+        }
+
+        #floorplan {}
+
+        #facade {}
     </style>
 </head>
 
@@ -1407,6 +1444,32 @@
 
                 updateAmenities();
                 updateAmenitiesDiv()
+            }
+
+            console.log('e.target', e.target);
+
+            if (e.target.className.includes("changeImg") && e.target.className.includes("floorplan")) {
+
+                const key = e.target.getAttribute("tab")
+                const img = document.getElementById(`img-${key}`)
+                img.src = img.src.replace("hero", "floorplan")
+                console.log('img', img);
+
+                e.target.parentElement.querySelectorAll(".changeImg").forEach(i => i.classList.remove("active"))
+                e.target.classList.add("active")
+                //document.getElementById("facade").classList.remove("active")
+            }
+
+            if (e.target.className.includes("changeImg") && e.target.className.includes("facade")) {
+
+                const key = e.target.getAttribute("tab")
+                const img = document.getElementById(`img-${key}`)
+                img.src = img.src.replace("floorplan", "hero")
+
+                console.log('img', img);
+                e.target.parentElement.querySelectorAll(".changeImg").forEach(i => i.classList.remove("active"))
+                e.target.classList.add("active")
+                //document.getElementById("facade").classList.add("active")
             }
         })
 
@@ -3248,7 +3311,7 @@
                                             <div class="lotItem title" >${lotData['Lot_Home_Facade']}</div>
                                         </div>
                                         <div>
-                                            <img src="homes/${data['HOME_ID']}/hero.jpg" style="width:100%">
+                                            <img class="lot-image" id="img-${key}" src="homes/${data['HOME_ID']}/hero.jpg" style="width:100%">
                                         </div>
                                         <div>
                                             <div class="inlineRow">
@@ -3275,6 +3338,12 @@
                                                 <div class="download-qr">${download}</div>
                                             </div>
                                         </div>
+
+                                    </div>
+
+                                    <div class="floorplan-facade">
+                                        <div class="changeImg floorplan" tab="${key}">FLOORPLAN</div>
+                                        <div class="changeImg facade active" tab="${key}">FACADE</div>
                                     </div>
 
                                 </section>
