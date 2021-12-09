@@ -1446,18 +1446,14 @@
                 updateAmenitiesDiv()
             }
 
-            console.log('e.target', e.target);
-
             if (e.target.className.includes("changeImg") && e.target.className.includes("floorplan")) {
 
                 const key = e.target.getAttribute("tab")
                 const img = document.getElementById(`img-${key}`)
                 img.src = img.src.replace("hero", "floorplan")
-                console.log('img', img);
 
                 e.target.parentElement.querySelectorAll(".changeImg").forEach(i => i.classList.remove("active"))
                 e.target.classList.add("active")
-                //document.getElementById("facade").classList.remove("active")
             }
 
             if (e.target.className.includes("changeImg") && e.target.className.includes("facade")) {
@@ -1466,10 +1462,8 @@
                 const img = document.getElementById(`img-${key}`)
                 img.src = img.src.replace("floorplan", "hero")
 
-                console.log('img', img);
                 e.target.parentElement.querySelectorAll(".changeImg").forEach(i => i.classList.remove("active"))
                 e.target.classList.add("active")
-                //document.getElementById("facade").classList.add("active")
             }
         })
 
