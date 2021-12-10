@@ -2311,20 +2311,26 @@
             //BUILDERS data
             getObject('object_14').then(json => {
                 console.log('BUILDERS', json);
-                mainData.builders = json.filter(i => i.Builder_FilterButton_Active !== "").map(i => {
+                mainData.builders = json
+                    .filter(i => i.Builder_FilterButton_Active !== "")
+                    .map(i => {
 
-                    const inactiveImg = (new DOMParser()).parseFromString(i.Builder_FilterButton_InActive, 'text/html').querySelector('img');
-                    const inactive = inactiveImg.src;
-                    const activeImg = (new DOMParser()).parseFromString(i.Builder_FilterButton_Active, 'text/html').querySelector('img');
-                    const active = activeImg.src;
+                        const inactiveImg = (new DOMParser()).parseFromString(i.Builder_FilterButton_InActive, 'text/html').querySelector('img');
+                        const inactive = inactiveImg?.src || "";
+                        const activeImg = (new DOMParser()).parseFromString(i.Builder_FilterButton_Active, 'text/html').querySelector('img');
+                        const active = activeImg?.src || "";
 
-                    return {
-                        inactive,
-                        active,
-                        builderName: i.Builder_Name,
-                        builderId: i.Builder_ID
-                    }
-                });
+                        const smallImg = (new DOMParser()).parseFromString(i.Builder_logo_sm, 'text/html').querySelector('img');
+                        const small = smallImg?.src || "";
+
+                        return {
+                            inactive,
+                            active,
+                            builderName: i.Builder_Name,
+                            builderId: i.Builder_ID,
+                            smallLogo: small
+                        }
+                    });
 
                 mainData.builders.map(i => {
                     console.log('=============', i);
@@ -3262,7 +3268,7 @@
 
                                 const bImg = mainData.builders.find(i => i.builderName === builderName);
                                 if (bImg) {
-                                    builder = `<img src="${bImg.active}"></a>`
+                                    builder = `<img src="${bImg.smallLogo}"></a>`
                                 }
                             }
 
@@ -3298,8 +3304,9 @@
                                 <section class="tab-panel" id="tab-${key}">
                                    
                                     <div style="padding:10px;">
-                                        <div style="text-align:end">
-                                            ${desName}
+                                        <div class="inlineRow">
+                                            <div class="lotItem">${desName}</div>
+                                            <div class="lotItem">${data['FACADE']}</div>
                                         </div>
                                         <div>
                                             <div class="lotItem title" >${lotData['Lot_Home_Facade']}</div>
