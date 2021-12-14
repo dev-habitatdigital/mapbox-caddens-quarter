@@ -588,6 +588,17 @@
             margin-top: 10px;
         }
 
+        .smallButton {
+            display: flex;
+            align-content: center;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .smallButton>img {
+            width: 50px;
+            height: 50px;
+        }
 
         #qrcode {
             padding: 20px;
@@ -659,7 +670,7 @@
 
             .search-bar {
                 /* background-size: 500px 100px; */
-                background-size: 500px 100px, 100% 100px;
+                background-size: 580px 100px, 100% 100px;
                 background-position: center right -160px, left top;
             }
 
@@ -1683,6 +1694,27 @@
                 imgMouseDown: "img/buttons/Reset button_not active.png",
                 className: "action  order4 am",
                 action: "",
+            },
+
+            { //toggle layaers BUTTON
+                positionType: 'flex',
+                position: { top: 10, left: 70 },
+                layerId: "zoomButtons",
+                callbackAction: function () {
+
+                    console.log('-----------------------------------', map.getLayoutProperty('satellite', 'visibility'));
+                    if (map.getLayoutProperty('satellite', 'visibility') === "visible") {
+                        map.setLayoutProperty('satellite', 'visibility', 'none');
+                    } else {
+                        map.setLayoutProperty('satellite', 'visibility', 'visible');
+                    }
+
+                },
+                imgSrc: 'img/buttons/btn_satellite.png',
+                imgMouseDown: "img/buttons/btn_map.png",
+                className: "action  order4 am smallButton",
+                action: "",
+                buttonType: "toggle"
             }
 
 
@@ -2672,8 +2704,6 @@
                 })
                 //==== INTERNAL =====
 
-
-
                 //URL PARAMS
                 if (urlProps.amenityid && urlProps.amenityid > 0) {
                     const c = data.find(i => +i['Amenity_ID'] === +urlProps.amenityid)
@@ -2684,9 +2714,18 @@
                         })
                     }
                 }
-
-
             })
+
+            map.addLayer({
+                id: 'satellite',
+                source: { "type": "raster", "url": "mapbox://mapbox.satellite", "tileSize": 256 },
+                type: "raster",
+                'layout': {
+                    // Make the layer visible by default.
+                    'visibility': 'none',
+                }
+            });
+
             map.addSource("myImageSource", {
                 "type": "image",
                 "url": "rendered.png",
