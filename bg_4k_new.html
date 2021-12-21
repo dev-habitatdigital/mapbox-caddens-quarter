@@ -417,7 +417,7 @@
             color: white;
             background-color: black;
         } */
-        .sidepanel .closebtn {
+        .closebtn {
             display: flex;
             position: absolute;
             top: 9px;
@@ -438,6 +438,12 @@
 
         .closebtn:hover {
             background-color: #202020;
+        }
+
+        .forImg {
+            position: relative !important;
+            top: 54px;
+            left: calc(50% - 34px);
         }
 
         .openbtn {
@@ -896,6 +902,10 @@
             align-content: center;
             justify-content: center;
             align-items: center;
+
+
+            align-items: center;
+            flex-wrap: wrap;
         }
 
         #loaderModal {
@@ -1002,6 +1012,15 @@
         .floorplan {
             cursor: pointer
         }
+
+        .floorplanClick {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .openFullScreen {
+            background: url("img/buttons/expand_button.png") 0 0 no-repeat;
+        }
     </style>
 </head>
 
@@ -1011,7 +1030,10 @@
         <div class="loader"></div>
     </div>
 
-    <div id="imageModal"></div>
+    <div id="imageModal">
+        <div class="closebtn forImg" onclick="closeSidePannel()">&times;</div>
+        <div id="imgContainer"></div>
+    </div>
 
     <div id="mySidepanel" class="sidepanel">
         <div class="closebtn" onclick="closeSidePannel()">&times;</div>
@@ -1084,6 +1106,7 @@
 
         const legendImage = document.getElementById("legendImage");
         const imageModal = document.getElementById("imageModal");
+        const imgContainer = document.getElementById("imgContainer");
         const loaderModal = document.getElementById("loaderModal");
         const zoomButtons = document.getElementById("zoomButtons");
         const filtersDiv = document.getElementById("filtersDiv");
@@ -1498,7 +1521,8 @@
                 const img = document.getElementById(`img-${key}`)
                 img.src = img.src.replace("floorplan", "hero")
 
-                img.classList.remove("floorplanClick")
+                img.classList.add("floorplanClick")
+                //img.classList.remove("floorplanClick")
 
                 e.target.parentElement.querySelectorAll(".changeImg").forEach(i => i.classList.remove("active"))
                 e.target.classList.add("active")
@@ -1511,7 +1535,7 @@
                 img.src
 
                 imageModal.style.display = 'flex';
-                imageModal.innerHTML = `<img src="${img.src}">`
+                imgContainer.innerHTML = `<img src="${img.src}" style="width:100%">`
             }
         })
 
@@ -3394,7 +3418,10 @@
                                             <div class="lotItem title" >${lotData['Lot_Home_Facade']}</div>
                                         </div>
                                         <div>
-                                            <img class="lot-image" id="img-${key}" src="homes/${data['HOME_ID']}/hero.jpg" style="width:100%">
+                                            <img class="lot-image floorplanClick" id="img-${key}" src="homes/${data['HOME_ID']}/hero.jpg" style="width:100%">
+                                            <div style="position:relative">
+                                                <img class="" src="img/buttons/expand_button.png" style="width:54px;height:54px;position:absolute; top:-64px;left:5px;cursor:pointer">
+                                            </div>
                                         </div>
 
                                         <div class="info-qr">
@@ -3627,7 +3654,7 @@
         });
 
         function openSidePannel(data) {
-            document.getElementById("mySidepanel").style.width = "50%";
+            document.getElementById("mySidepanel").style.width = "550px";
             sidePanelContent.innerHTML = data;
         }
         function closeSidePannel() {
@@ -3741,7 +3768,6 @@
             urlProps.debugMode = debugMode
             urlProps.lotactive = lotactive
 
-
             if (!zoom) zoom = map.getZoom();
 
             if (lat && lng) {
@@ -3787,8 +3813,6 @@
         })
 
         //*/
-
-
         /**
         * @param slider HtmlElement with an initialized slider
         * @param threshold Minimum proximity (in percentages) to merge tooltips
