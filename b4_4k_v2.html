@@ -345,7 +345,7 @@
         }
 
         .sidepanel {
-            width: 0;
+            /* width: 0;
             position: fixed;
             z-index: 3;
             height: 100%;
@@ -356,7 +356,21 @@
             transition: 0.5s;
             display: flex;
             justify-content: center;
-            color: black;
+            color: black; */
+
+
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            background-color: white;
+            transition: 0.5s;
+            display: none;
+            width: 90%;
+
+            max-width: 1500px;
         }
 
         .lotLandOnly {
@@ -423,9 +437,9 @@
         }
 
         .forImg {
-            position: relative !important;
+            position: absolute;
             top: 54px;
-            left: calc(50% - 34px);
+            /* left: calc(50% - 34px); */
         }
 
         .openbtn {
@@ -756,10 +770,15 @@
 
 
 
-
+        .lotImage {
+            display: flex;
+            align-content: center;
+            justify-content: center;
+            align-items: center;
+        }
 
         .container {
-            margin: 5px auto;
+            margin-top: 5px;
         }
 
         .container>input[type="radio"] {
@@ -809,7 +828,7 @@
         }
 
         .tab-content section.tab-panel {
-            padding: 10px 0;
+            /* padding: 10px 0; */
         }
 
         /* The magic */
@@ -944,9 +963,9 @@
         }
 
         .floorplan-facade {
-            position: absolute;
-            bottom: 100px;
-            width: 100%;
+            /* position: absolute;
+            bottom: 0px;
+            width: 100%; */
             display: flex;
             flex-direction: row;
             align-content: center;
@@ -998,12 +1017,59 @@
         .floorplanClick {
             cursor: pointer;
             position: relative;
+            max-height: 600px;
+            max-width: 100%;
         }
 
         .openFullScreen {
             background: url("img/buttons/expand_button.png") 0 0 no-repeat;
         }
 
+
+
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 110%;
+            left: 50%;
+            margin-left: -60px;
+        }
+
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: black transparent transparent transparent;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+        }
+
+        #imgContainer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            align-content: center;
+            width: 90%;
+        }
     </style>
 </head>
 
@@ -2603,12 +2669,26 @@
                         off.setAttribute("am_id", i.Amenity_Cat_ID);
                         off.setAttribute("class", "am");
 
+                        const tooltipOn = document.createElement("div")
+                        tooltipOn.className = "tooltip"
+                        const tooltipText = document.createElement("span")
+                        tooltipText.innerText = i['Amenity_Cat_Name']
+                        tooltipText.className = "tooltiptext"
+                        tooltipOn.appendChild(on)
+                        tooltipOn.appendChild(tooltipText)
+
+                        const tooltipOff = document.createElement("div")
+                        tooltipOff.className = "tooltip"
+                        tooltipOff.appendChild(tooltipText.cloneNode(true))
+                        tooltipOff.appendChild(off)
+
                         if (i['Amenity_Cat_Type'] === "External") {//for div use only External
                             mainData.amenitiesDiv[i.Amenity_Cat_ID] = {
                                 on: srcOn,
                                 off: srcOff,
-                                onimg: on,
-                                offimg: off,
+                                onimg: tooltipOn,
+                                offimg: tooltipOff,
+                                tooltip: i['Amenity_Cat_Name']
                             };
                         }
 
@@ -3400,10 +3480,10 @@
                                         <div>
                                             <div class="lotItem title" >${lotData['Lot_Home_Facade']}</div>
                                         </div>
-                                        <div>
-                                            <img class="lot-image floorplanClick" id="img-${key}" src="homes/${data['HOME_ID']}/hero.jpg" style="width:100%">
+                                        <div class="lotImage">
                                             <div style="position:relative">
-                                                <img class="" src="img/buttons/expand_button.png" style="width:54px;height:54px;position:absolute; top:-64px;left:5px;cursor:pointer; pointer-events: none;">
+                                            <img class="lot-image floorplanClick" id="img-${key}" src="homes/${data['HOME_ID']}/hero.jpg" >
+                                            <img class="" src="img/buttons/expand_button.png" style="width:54px;height:54px;position:absolute; bottom:5px;left:5px;cursor:pointer; pointer-events: none;">
                                             </div>
                                         </div>
 
@@ -3637,11 +3717,11 @@
         });
 
         function openSidePannel(data) {
-            document.getElementById("mySidepanel").style.width = "550px";
+            document.getElementById("mySidepanel").style.display = "inline";
             sidePanelContent.innerHTML = data;
         }
         function closeSidePannel() {
-            document.getElementById("mySidepanel").style.width = "0";
+            document.getElementById("mySidepanel").style.display = "none";
         }
 
         function webHook(url) {
