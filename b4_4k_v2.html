@@ -1019,10 +1019,26 @@
 
         .floorplanClick {
             cursor: pointer;
-            position: relative;
+            /* position: relative;
             max-height: 600px;
             max-width: 100%;
-            min-height: 300px;
+            min-height: 300px; */
+
+            width: 100%;
+            max-width: 100%;
+            float: left;
+            clear: both;
+        }
+
+        @media screen and (max-width: 1920px) {
+            .floorplanClick {
+                max-width: 540px !important;
+                max-height: 259px !important;
+            }
+
+            #legendImage{
+                max-height:400px;
+            }
         }
 
         .openFullScreen {
@@ -1256,7 +1272,7 @@
         // const legendTitle = document.getElementById('legend-title');
         // const legendContent = document.getElementById('legend-content');
         legendTitle.addEventListener("click", () => {
-            legend.style.height = legendImage.naturalHeight + 115 + `px`;
+            legend.style.height = legendImage.clientHeight + 115 + `px`;
         })
         legendClose.addEventListener("click", () => {
             legend.style.height = `50px`;
