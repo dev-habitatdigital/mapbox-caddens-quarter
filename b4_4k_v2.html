@@ -1606,7 +1606,11 @@
                 img.src
 
                 imageModal.style.display = 'flex';
-                imgContainer.innerHTML = `<img src="${img.src}" style="width:100%">`
+                if (img.src.indexOf('hero') != -1 ) {// found hero (1000 x 522)
+                    imgContainer.innerHTML = `<img src="${img.src}" style="width:100%">`
+                } else { // Floorplan (1000 x 669)
+                    imgContainer.innerHTML = `<img src="${img.src}" style="width:65%">`
+                }
             }
         })
 
