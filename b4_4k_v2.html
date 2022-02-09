@@ -157,6 +157,10 @@
 
         .am_image {
             padding: 15px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
         }
 
         /*
@@ -362,6 +366,7 @@
             transition: 0.5s;
             width: 90%;
             max-width: 1500px;
+            max-height: 90%;
         }
 
         .lotLandOnly {
@@ -1036,8 +1041,8 @@
                 max-height: 259px !important;
             }
 
-            #legendImage{
-                max-height:400px;
+            #legendImage {
+                max-height: 400px;
             }
         }
 
@@ -1606,7 +1611,7 @@
                 img.src
 
                 imageModal.style.display = 'flex';
-                imgContainer.innerHTML = `<img src="${img.src}" style="width:95%">` // Floorplan & Hero
+                imgContainer.innerHTML = `<img src="${img.src}" style="max-height: calc(100vh - 60px)">`
             }
         })
 
@@ -3205,7 +3210,7 @@
                     <div class="side-am">
                         <div>
                             <div class="am_image">
-                                <img src="data/POI/${Amenity_ID}.png" style="width:100%">
+                                <img src="data/POI/${Amenity_ID}.png" style="max-height: calc(100vh - 356px);">
                             </div>
                             <div class="am_data">
                                 <div class="amenity_titles">
