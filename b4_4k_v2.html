@@ -3443,6 +3443,7 @@
                             }
 
                             let prices = ``;
+                            //if ((lotData['Lot_Status'] === "Available") || (lotData['Lot_Status'].toLowerCase() === "available inactive")){
                             if (lotData['Lot_Status'] === "Available") {
 
                                 let pr = '';
@@ -3573,6 +3574,7 @@
                     if (lotData['Lot_Type'] === "Land") {
 
                         let prices = ``;
+                        //if ((lotData['Lot_Status'] === "Available") || (lotData['Lot_Status'].toLowerCase() === "available inactive")){
                         if (lotData['Lot_Status'] === "Available") {
                             prices = `    
                                     ${landPrice}
@@ -3605,6 +3607,7 @@
 
                         let prices = ``;
                         if (lotData['Lot_Status'] === "Available") {
+                        //if ((lotData['Lot_Status'] === "Available") || (lotData['Lot_Status'].toLowerCase() === "available inactive")) {
 
                             let Lot_House_Price = ''
                             if (+lotData['Lot_House_Price'] > 0) {
