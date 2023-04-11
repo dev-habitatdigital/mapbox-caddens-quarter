@@ -3437,7 +3437,7 @@
                             console.log('packagePrice', packagePrice);
 
                             if (packagePrice !== 0 && packagePrice !== "0") {
-                                packagePrice = `<div class="lotItem bold"><span>Package price:</span> $${packagePrice}</div>`
+                                packagePrice = `<div class="lotItem bold"><span>Land price:</span> $${packagePrice}</div>` //Package Price to Land Price 12-Apr-2023
                             } else {
                                 packagePrice = ``;
                             }
@@ -3510,7 +3510,7 @@
                                             <div class="lotItem title" >${lotData['Lot_Home_Facade']}</div>
                                         </div>
                                         <div class="lotImage">
-                                            <div style="position:relative">
+                                            <div style="position:relative">                                                
                                             <img class="lot-image floorplanClick" id="img-${key}" src="homes/${data['HOME_ID']}/hero.jpg" >
                                             <img class="" src="img/buttons/expand_button.png" style="width:25px;height:25px;position:absolute; bottom:5px;left:5px;cursor:pointer; pointer-events: none;">
                                             </div>
@@ -3547,10 +3547,12 @@
                                         </div>
                                     </div>
 
+                                    <!-- Floorplan and facade tabs removed 12-Apr-2023
                                     <div class="floorplan-facade">
                                         <div class="changeImg floorplan" tab="${key}">FLOORPLAN</div>
                                         <div class="changeImg facade active" tab="${key}">FACADE</div>
                                     </div>
+                                    --> 
 
                                 </section>
                             `
@@ -3579,9 +3581,9 @@
                                 `
                         }
 
-                        lotText = `
+                        lotText = `                        
                         <div class="lotLandOnly">
-                            <div>
+                            <div>                                
                                 <img src="data/Bingara_Local_Files/${id}/lot.png" style="width:100%">
                             </div>
                             <div>
@@ -3642,13 +3644,13 @@
 
                         let download = ``;
 
-                        lotText = `
+                        lotText = `                        
                         <div style="padding:10px;">
                             <div style="display: flex;">
                                 <div class="lotItem title">${lotData['Lot_Home_Design']}</div>
                                 <div class="lotItem title">${lotData['Lot_Home_Facade']}</div>
                             </div>
-                            <div>
+                            <div>                                
                                 <img src="data/Lots/${id}/hero.jpg" style="width:100%">
                             </div>
                             <div>
